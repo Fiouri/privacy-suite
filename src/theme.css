@@ -1,0 +1,12 @@
+:root {
+  color-scheme: light;
+  --paper: #f5f4ee;
+  --ink: #25382c;
+  --green: #183e32;
+  --lime: #e8eec9;
+  --muted: #626e5e;
+  --line: #dde0d5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
