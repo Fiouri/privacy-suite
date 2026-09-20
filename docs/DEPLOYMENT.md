@@ -1,6 +1,6 @@
 # Free static deployment
 
-Prepared for Cloudflare Pages Free. No deployment/account has been created by this source bundle. No backend or paid infrastructure is needed.
+Prepared for Cloudflare Pages Free. The `fiouri-privacy-suite` Pages project has been created; its first deployment is pending asset upload. No backend or paid infrastructure is needed.
 
 ## Build settings
 

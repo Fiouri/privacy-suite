@@ -2,6 +2,8 @@
 
 Verified locally on Windows on 2026-09-19.
 
+The same checks also passed on Ubuntu in [GitHub Actions run 35461062858](https://github.com/Fiouri/privacy-suite/actions/runs/35461062858), including all three browser engines and the production build artifact.
+
 ## Passed
 
 - `npm run typecheck`: strict TypeScript, including tests and build configuration.
@@ -25,9 +27,8 @@ All tools work after reloading against a disconnected test server. Chromium and 
 
 ## Limits of this verification
 
-- Source repository: https://github.com/Fiouri/privacy-suite. The initial remote GitHub Actions run is pending publication of this commit.
-- No public deployment or Cloudflare account changes were made. Production host response headers and host analytics settings must be verified after deployment.
-- Browser engines were automated on Windows; physical Android/iOS installation, OS-specific PWA behavior, and low-memory device performance were not tested.
+- The Cloudflare Pages project `fiouri-privacy-suite` was created, but its first deployment is pending asset upload. Production host response headers and host analytics settings must be verified after deployment.
+- Browser engines were automated on Windows and Ubuntu CI; physical Android/iOS installation, OS-specific PWA behavior, and low-memory device performance were not tested.
 - Automated accessibility checks are not a complete accessibility audit.
 - No independent security or cryptographic audit has been performed.
 - File processing is bounded to 50 MiB, not streamed. Secure deletion of browser/OS memory is not guaranteed.
