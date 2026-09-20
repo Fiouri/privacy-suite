@@ -4,7 +4,7 @@ Privacy Suite 0.1 is an unaudited MVP. Automated tests are not an independent cr
 
 ## Reporting
 
-Do not publish passwords, private files, personal data, or a working exploit against users in a public issue. When the repository is published, its maintainer should enable GitHub private vulnerability reporting before accepting security reports. Use the repository Security → Report a vulnerability control when available. Until a private channel is configured, request one from the maintainer without disclosing exploit details. This source bundle does not invent an unmonitored security email address.
+Do not publish passwords, private files, personal data, or a working exploit against users in a public issue. GitHub private vulnerability reporting is enabled: use [Security → Report a vulnerability](https://github.com/Fiouri/privacy-suite/security/advisories/new) to report privately to the repository maintainers. If that control is unavailable, request a private channel from the maintainer without disclosing exploit details.
 
 Include affected version, browser/OS, minimal reproduction using synthetic data, expected/actual behavior, and impact. No guaranteed response SLA is offered by this initial project.
 

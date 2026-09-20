@@ -2,6 +2,8 @@
 
 Verified locally on Windows on 2026-09-19.
 
+Expanded audit on 2026-09-20: 17 unit/security tests, 28 local browser cases passed (2 explicit clipboard-automation skips), and 27 hosted browser cases passed (the same 2 skips plus Windows WebKit offline emulation). Typecheck, lint, build, dependency audit, and repository exposure scans passed. See [audit scope, findings, and limitations](AUDIT-2026-09-20.md). The original release verification below is retained as a historical baseline.
+
 The same checks also passed on Ubuntu in [GitHub Actions run 35461062858](https://github.com/Fiouri/privacy-suite/actions/runs/35461062858), including all three browser engines and the production build artifact.
 
 ## Passed
@@ -21,7 +23,7 @@ The same checks also passed on Ubuntu in [GitHub Actions run 35461062858](https:
 
 Binary and Unicode-filename round-trip; empty files; randomized ciphertext; wrong passwords; changed salt, nonce, ciphertext and tag; truncated files; unsupported versions and hostile iteration counts; password and file-size limits; filename sanitization; independent Node crypto interoperability; standard SHA-256 vectors; character-group coverage and random-byte rejection sampling.
 
-Browser tests save real encrypted and decrypted downloads and compare the recovered bytes. Windows can temporarily lock completed downloads, so the tests retry filesystem save/read operations for a bounded period; they do not relax cryptographic or content assertions.
+Browser tests read real encrypted and decrypted downloads and compare the recovered bytes. Windows can temporarily lock completed downloads, so the tests read the browser's completed download directly with bounded filesystem retries, without creating a second copy. They do not relax cryptographic or content assertions.
 
 All tools work after reloading against a disconnected test server. Chromium and Firefox also use browser offline emulation. Windows WebKit's offline navigation emulation reports an internal browser error, so its test uses the disconnected server without that emulation. No network fallback is available in any of the offline tests. Cache entries are checked to contain only app assets.
 

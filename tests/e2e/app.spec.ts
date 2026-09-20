@@ -3,11 +3,13 @@ import { readFile } from "node:fs/promises";
 import { test, expect, type Download } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const readDownload = async (download: Download, path: string): Promise<Buffer> => {
+const readDownload = async (download: Download): Promise<Buffer> => {
+  // Read the completed browser file directly. Windows may briefly lock it.
+  // Do not copy it first or use the Chromium stream wrapper, which can be empty.
+  expect(await download.failure()).toBeNull();
+  const path = await download.path();
   let bytes: Buffer = Buffer.alloc(0);
-  // Windows can briefly lock completed downloads. Retry filesystem access only.
   await expect(async () => {
-    await download.saveAs(path);
     bytes = await readFile(path);
   }).toPass({ timeout: 15_000, intervals: [100, 250, 500, 1000] });
   return bytes;
@@ -16,7 +18,7 @@ const readDownload = async (download: Download, path: string): Promise<Buffer> =
 
 test("encrypt, download, reject wrong password, decrypt byte-for-byte, clear", async ({
   page,
-}, testInfo) => {
+}) => {
   const requests: string[] = [];
   const errors: string[] = [];
   page.on("request", (request) => {
@@ -43,8 +45,7 @@ test("encrypt, download, reject wrong password, decrypt byte-for-byte, clear", a
   await page.getByRole("link", { name: "Download .psuite file" }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe("protected.psuite");
-  const path = testInfo.outputPath("encrypted-test.psuite");
-  const encrypted = await readDownload(download, path);
+  const encrypted = await readDownload(download);
   expect(encrypted.includes(Buffer.from("private test data"))).toBe(false);
   expect(encrypted.includes(Buffer.from("private-note.txt"))).toBe(false);
   await page
@@ -73,8 +74,7 @@ test("encrypt, download, reject wrong password, decrypt byte-for-byte, clear", a
   await page.getByRole("link", { name: "Download recovered file" }).click();
   const recovered = await recoveredPromise;
   expect(recovered.suggestedFilename()).toBe("private-note.txt");
-  const recoveredPath = testInfo.outputPath("recovered-test.txt");
-  expect(await readDownload(recovered, recoveredPath)).toEqual(Buffer.from("private test data\0\xff"));
+  expect(await readDownload(recovered)).toEqual(Buffer.from("private test data\0\xff"));
   expect(requests.length).toBe(before);
   expect(errors).toEqual([]);
   await page.getByRole("button", { name: "Clear this tool" }).click();
@@ -209,12 +209,15 @@ test("app shell and all tools work after an offline reload", async ({
     const pending = page.waitForEvent("download");
     await page.getByRole("link", { name: "Download .psuite file" }).click();
     const downloaded = await pending;
-    const path = await downloaded.path();
-    if (!path) throw new Error("Missing offline download");
+    const encrypted = await readDownload(downloaded);
     await page
       .getByRole("button", { name: "Decrypt a file", exact: true })
       .click();
-    await page.getByLabel("Choose file", { exact: true }).setInputFiles(path);
+    await page.getByLabel("Choose file", { exact: true }).setInputFiles({
+      name: "offline.psuite",
+      mimeType: "application/octet-stream",
+      buffer: encrypted,
+    });
     await page
       .getByLabel("Enter your password", { exact: true })
       .fill("offline strong password");
@@ -224,6 +227,9 @@ test("app shell and all tools work after an offline reload", async ({
     await expect(
       page.getByRole("link", { name: "Download recovered file" }),
     ).toBeVisible();
+    const recoveredDownload = page.waitForEvent("download");
+    await page.getByRole("link", { name: "Download recovered file" }).click();
+    expect(await readDownload(await recoveredDownload)).toEqual(Buffer.from("offline encryption"));
     const entries = await page.evaluate(async () => {
       const keys = await caches.keys();
       return (
