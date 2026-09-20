@@ -27,7 +27,9 @@ All tools work after reloading against a disconnected test server. Chromium and 
 
 ## Limits of this verification
 
-- The Cloudflare Pages project `fiouri-privacy-suite` was created, but its first deployment is pending asset upload. Production host response headers and host analytics settings must be verified after deployment.
+- Public deployment verified on 2026-09-20: https://fiouri-privacy-suite.pages.dev/. All eight served build assets match the local build byte-for-byte. HTTPS responses apply CSP, no-referrer, nosniff, frame and permissions restrictions, HSTS, disabled NEL/reporting, worker revalidation, and immutable fingerprinted assets. No script injection was found.
+- Hosted browser suite: 11 passed across Chromium, Firefox, and WebKit; one hosted WebKit offline test intentionally skipped because of Windows emulation limitations. Hosted offline reload and all tools passed in Chromium and Firefox; WebKit offline passed separately against the disconnected local server.
+- After the hosting-header correction, strict typecheck, lint, all 11 unit tests, build, and all 12 local browser cases passed. Firefox required execution outside the Windows sandbox; its initial sandbox launch failures were resolved by that rerun.
 - Browser engines were automated on Windows and Ubuntu CI; physical Android/iOS installation, OS-specific PWA behavior, and low-memory device performance were not tested.
 - Automated accessibility checks are not a complete accessibility audit.
 - No independent security or cryptographic audit has been performed.

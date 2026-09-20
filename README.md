@@ -2,6 +2,8 @@
 
 **Yours. Only yours.** An MIT-licensed, local-only privacy toolkit built with React, strict TypeScript, and Vite.
 
+[Open Privacy Suite](https://fiouri-privacy-suite.pages.dev/) · [CI](https://github.com/Fiouri/privacy-suite/actions)
+
 Encrypt/decrypt files, generate secure passwords, and calculate/compare SHA-256 hashes. No backend, accounts, analytics, trackers, external runtime APIs, remote fonts, or cloud processing. File processing happens entirely in the browser. After the application shell is cached, every tool works offline.
 
 ## Run locally

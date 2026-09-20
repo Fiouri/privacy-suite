@@ -1,4 +1,6 @@
 /*
+  NEL: {"max_age":0}
+  Report-To: {"group":"cf-nel","max_age":0,"endpoints":[]}
   Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'
   Referrer-Policy: no-referrer
   X-Content-Type-Options: nosniff

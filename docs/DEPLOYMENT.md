@@ -1,6 +1,6 @@
 # Free static deployment
 
-Prepared for Cloudflare Pages Free. The `fiouri-privacy-suite` Pages project has been created; its first deployment is pending asset upload. No backend or paid infrastructure is needed.
+Live on Cloudflare Pages at https://fiouri-privacy-suite.pages.dev/. The `fiouri-privacy-suite` project uses Direct Upload, with no backend, Functions, paid add-ons, or purchased domain. GitHub Actions verifies source changes and produces the `privacy-suite-static` artifact; pushes do not automatically deploy. Upload the verified artifact through the project's Create deployment action for future releases.
 
 ## Build settings
 
@@ -22,6 +22,10 @@ Cloudflare currently documents free, unlimited static asset requests and 500 mon
 Sources checked during implementation: [Pages pricing](https://developers.cloudflare.com/pages/functions/pricing/), [Pages limits](https://developers.cloudflare.com/pages/platform/limits/), [Pages headers](https://developers.cloudflare.com/pages/configuration/headers/).
 
 ## Release verification
+
+Set `PLAYWRIGHT_BASE_URL` to the deployed HTTPS origin before `npm run test:e2e` to run browser tests against that release. Leave it unset for local/CI testing. Hosted offline reloads run in Chromium and Firefox; Windows WebKit uses the local disconnected-server test because its offline navigation emulation is unsupported.
+
+The supplied headers explicitly disable Network Error Logging with `NEL: {"max_age":0}` and clear Cloudflare's reporting group with `Report-To: {"group":"cf-nel","max_age":0,"endpoints":[]}`. Verify these values on real responses: the host otherwise enables error reporting by default. Header changes are included in the service worker cache version so new installs refresh cached responses. Existing tabs must close before the new worker activates.
 
 1. Run `npm ci`, install Playwright browsers, and `npm run check` before release.
 2. Confirm real HTTPS responses apply CSP, no-referrer, nosniff, frame restrictions, permissions policy, and the `sw.js` no-cache policy.

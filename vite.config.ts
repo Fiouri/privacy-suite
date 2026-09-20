@@ -20,6 +20,7 @@ const offlineShell = (): Plugin => ({
     ];
     const fingerprint = createHash("sha256").update(JSON.stringify(bundle));
     for (const asset of [
+      "_headers",
       "manifest.webmanifest",
       "icon.svg",
       "icon-192.png",

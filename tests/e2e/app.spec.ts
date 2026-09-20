@@ -146,9 +146,15 @@ test("app shell and all tools work after an offline reload", async ({
   context,
   browserName,
 }) => {
+  const deploymentURL = process.env.PLAYWRIGHT_BASE_URL;
+  test.skip(
+    Boolean(deploymentURL) && browserName === "webkit",
+    "Hosted offline navigation requires emulation unsupported by Windows WebKit; local disconnected-server coverage still applies.",
+  );
   const host = await startOfflineTestHost();
+  const origin = deploymentURL ? new URL(deploymentURL).origin : host.origin;
   try {
-    await page.goto(host.origin);
+    await page.goto(origin);
     await expect(page.getByText("Ready for offline use")).toBeVisible();
     await page.evaluate(async () => {
       await navigator.serviceWorker.ready;
@@ -234,7 +240,7 @@ test("app shell and all tools work after an offline reload", async ({
     expect(
       entries.every(
         (url) =>
-          url.startsWith(host.origin) &&
+          new URL(url).origin === origin &&
           /^(?:\/$|\/index\.html$|\/manifest\.webmanifest$|\/icon[^/]*$|\/assets\/[^?]+$)/.test(
             new URL(url).pathname,
           ),
@@ -245,10 +251,10 @@ test("app shell and all tools work after an offline reload", async ({
   }
 });
 
-test("accessible tools, mobile layout, no remote assets", async ({ page }) => {
+test("accessible tools, mobile layout, no remote assets", async ({ page, baseURL }) => {
   const remote: string[] = [];
   page.on("request", (request) => {
-    if (!request.url().startsWith("http://127.0.0.1:4173/"))
+    if (!baseURL || new URL(request.url()).origin !== new URL(baseURL).origin)
       remote.push(request.url());
   });
   await page.goto("/");
