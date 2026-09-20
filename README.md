@@ -4,6 +4,8 @@
 
 [Open Privacy Suite](https://fiouri-privacy-suite.pages.dev/) · [CI](https://github.com/Fiouri/privacy-suite/actions)
 
+**[Ελληνικός οδηγός εγκατάστασης και χρήσης](docs/USER_GUIDE_EL.md)** — Android, iPhone/iPad, Windows, macOS, Linux, offline use, and every available tool.
+
 Encrypt/decrypt files, generate secure passwords, and calculate/compare SHA-256 hashes. No backend, accounts, analytics, trackers, external runtime APIs, remote fonts, or cloud processing. File processing happens entirely in the browser. After the application shell is cached, every tool works offline.
 
 ## Run locally

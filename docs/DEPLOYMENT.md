@@ -1,5 +1,7 @@
 # Free static deployment
 
+For installing and using the app on a phone or computer, see the [Greek user guide](USER_GUIDE_EL.md). This document covers hosting and releases.
+
 Live on Cloudflare Pages at https://fiouri-privacy-suite.pages.dev/. The `fiouri-privacy-suite` project uses Direct Upload, with no backend, Functions, paid add-ons, or purchased domain. GitHub Actions verifies source changes and produces the `privacy-suite-static` artifact; pushes do not automatically deploy. Upload the verified artifact through the project's Create deployment action for future releases.
 
 ## Build settings
@@ -35,4 +37,4 @@ The supplied headers explicitly disable Network Error Logging with `NEL: {"max_a
 6. Test installation through the browser's install menu/Add to Home Screen; exact UI depends on browser and OS.
 7. Close all tabs/installed app windows to allow a new service worker to activate. Never force an update during file processing.
 
-The source repository is https://github.com/Fiouri/privacy-suite. GitHub Actions verifies pushes and pull requests. Free GitHub-hosted CI for a public repository fits the open-source model; private repository minute limits depend on the account. Protect the default branch, require Verify, and configure private vulnerability reporting after publication.
+The source repository is https://github.com/Fiouri/privacy-suite. GitHub Actions verifies pushes and pull requests. Free GitHub-hosted CI for a public repository fits the open-source model; private repository minute limits depend on the account. Default-branch protection with the required `verify` check, Dependabot alerts, and private vulnerability reporting were enabled on 2026-09-20. Preserve these protections when changing repository settings.
